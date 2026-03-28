@@ -1,0 +1,19 @@
+<div class="gremodo-container">
+    <h1 class="timer-display">
+        {{ timerService.timeLeft() | timeFormat }}
+    </h1>
+
+    <div class="timer-controls">
+        @if (!isExpired() && (isIdle() || isPaused())) {
+            <button (click)="timerService.startTimer()">Play</button>
+        }
+
+        @if (!isExpired() && isRunning()) {
+            <button (click)="timerService.pauseTimer()">Pause</button>
+        }
+
+        @if (!isIdle() || isExpired()) {
+            <button (click)="timerService.resetTimer()">Reset</button>
+        }
+    </div>
+</div>
