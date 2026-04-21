@@ -1,0 +1,97 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+.timer-container {
+    margin: v.$radius-xs;
+}
+
+.timer-container__timer-progress {
+    .timer-wrapper {
+        @include m.flex-center;
+        @include m.floating-card;
+
+        position: relative;
+        border-radius: 50%;
+        max-width: clamp(160px, 32vw, 320px);
+
+        svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        circle {
+            fill: none;
+            stroke-width: v.$radius-lg;
+            stroke-linecap: round;
+        }
+
+        .circle-track {
+            stroke: v.$bg-app;
+        }
+
+        .circle-progress {
+            stroke: v.$color-work;
+            stroke-dasharray: 879.6;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .time-display {
+            position: absolute;
+            font-size: clamp(v.$font-heading, 8dvw, v.$font-heading-4);
+            font-weight: bold;
+            color: v.$text-muted;
+            font-variant-numeric: tabular-nums;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.timer-container__timer-controllers {
+    @include m.floating-card;
+    @include m.flex-center;
+
+    margin-top: v.$space-xl;
+    padding: v.$radius-xs;
+
+    .btn-pause,
+    .btn-play,
+    .btn-reset {
+        @include m.flex-center;
+        @include m.button-font-size;
+        padding: v.$radius-xxs;
+        margin: v.$space-md;
+
+        background-color: v.$bg-card;
+        color: v.$text-muted;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 v.$radius-xs v.$radius-xs v.$shadow-soft;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: v.$text-muted;
+            color: v.$color-work;
+            transform: scale(1.1) translateY(-(v.$space-xxs));
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+
+        &:disabled {
+            pointer-events: none;
+
+            opacity: 0.3;
+            filter: grayscale(100%);
+            cursor: not-allowed;
+
+            transform: none !important;
+            box-shadow: none !important;
+            background-color: v.$text-muted-dark !important;
+            color: v.$text-muted !important;
+        }
+    }
+}

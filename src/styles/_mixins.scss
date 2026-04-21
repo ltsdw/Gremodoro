@@ -1,0 +1,58 @@
+@use 'variables' as v;
+
+@mixin button-font-size {
+    font-size: clamp(v.$font-body, 3.2dvw, v.$font-heading);
+}
+
+@mixin title-font-size {
+    font-size: clamp(v.$font-body, 2.4dvw, v.$font-title);
+}
+
+@mixin body-font-size {
+    font-size: clamp(v.$font-caption, 1.6dvw, v.$font-body);
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin floating-card {
+    background-color: v.$bg-card;
+    border-radius: v.$radius-lg;
+    box-shadow: 0 v.$space-lg v.$space-xl v.$shadow-soft;
+    padding: v.$space-xl;
+}
+
+@mixin neon-border {
+    border: v.$radius-xxs solid v.$color-work;
+
+    box-shadow:
+        0 0 v.$radius-xs v.$color-work,
+        0 0 v.$radius-sm v.$color-work,
+        0 0 v.$radius-md v.$color-work-soft;
+}
+
+@mixin muted-border {
+    border: v.$radius-xxs solid v.$text-muted;
+
+    box-shadow:
+        0 0 v.$radius-xs v.$text-muted-mid-dark,
+        0 0 v.$radius-sm v.$text-muted-dark,
+        0 0 v.$radius-md v.$text-muted-darker;
+}
+
+@mixin muted-dark-border {
+    border: v.$radius-xxs solid v.$text-muted-dark;
+
+    box-shadow:
+        0 0 v.$radius-xs v.$text-muted-dark,
+        0 0 v.$radius-sm v.$text-muted-dark,
+        0 0 v.$radius-md v.$text-muted-darker;
+}
+
+@mixin floating-card-neon {
+    @include floating-card;
+    @include neon-border;
+}

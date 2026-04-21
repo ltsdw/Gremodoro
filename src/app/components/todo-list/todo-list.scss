@@ -1,0 +1,185 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+.todo-modal {
+    @include m.floating-card;
+    @include m.flex-center;
+
+    font-family: v.$font-family-segoe-monospace;
+    color: v.$text-muted;
+
+    &__surface {
+        display: flex;
+        flex-direction: column;
+        gap: v.$space-lg;
+        min-height: 80vh;
+        max-height: 80vh;
+        width: clamp(320px, 90vw, 480px);
+        box-sizing: border-box;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h2 {
+            @include m.title-font-size;
+            margin: 0;
+        }
+
+        button {
+            @include m.button-font-size;
+            color: v.$text-muted-dark;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: v.$color-work;
+            }
+        }
+    }
+
+    .input-group {
+        @include m.flex-center;
+        gap: v.$space-sm;
+        margin-bottom: v.$space-lg;
+
+        input {
+            @include m.body-font-size;
+            flex: 1;
+            background-color: v.$bg-app;
+            color: v.$text-main;
+            border: v.$space-xxs solid transparent;
+            outline: none;
+
+            padding: v.$space-md;
+            border-radius: v.$radius-sm;
+
+            transition: all 0.2s ease-in-out;
+
+            &:focus {
+                @include m.neon-border;
+            }
+        }
+
+        .btn-add {
+            @include m.flex-center;
+            @include m.button-font-size;
+
+            padding: v.$radius-xs;
+            background-color: v.$bg-card;
+            color: v.$text-muted;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 v.$radius-xs v.$radius-xs v.$shadow-soft;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: v.$text-muted;
+                color: v.$color-work;
+                transform: scale(1.1) translateY(-(v.$space-xxs));
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+    }
+
+    .task-list {
+        list-style: none;
+        border: v.$radius-xxs solid v.$text-muted-dark;
+        border-radius: v.$radius-sm;
+        display: flex;
+        flex-direction: column;
+        padding: v.$radius-sm;
+        gap: v.$space-xs;
+
+        min-width: 0;
+        min-height: 0;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .task-item {
+        @include m.flex-center;
+
+        gap: v.$space-sm;
+        padding: v.$space-sm;
+        border-radius: v.$radius-sm;
+        transition: background-color 0.2s;
+        min-width: 0;
+
+        &:hover {
+            background-color: v.$color-white-soft;
+
+            .delete-btn {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        .task-text {
+            @include m.body-font-size;
+            flex: 1;
+            color: v.$text-main;
+            transition: color 0.3s ease;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                width: 0%;
+                height: 2px;
+                background-color: v.$text-muted;
+                transition: width 0.3s ease-in-out;
+            }
+        }
+
+        &.is-completed {
+            .task-text {
+                color: v.$text-muted;
+                &::after {
+                    width: 100%;
+                }
+            }
+            .check-btn {
+                color: v.$color-short;
+            }
+        }
+    }
+
+    .check-btn,
+    .delete-btn {
+        @include m.button-font-size;
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        color: v.$text-muted;
+        transition: all 0.2s;
+    }
+
+    .check-btn:hover {
+        color: v.$color-work;
+    }
+
+    .delete-btn {
+        opacity: 0;
+        pointer-events: none;
+        color: #ef4444;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}

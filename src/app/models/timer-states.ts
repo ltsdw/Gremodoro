@@ -1,4 +1,4 @@
-import { TimerEventPublisher, TimerContext } from './timer-events';
+import { TimerEventPublisher, TimerContext, factoryEvent } from './timer-events';
 
 /**
  * `TimerState`
@@ -41,9 +41,16 @@ export abstract class TimerState {
      */
     reset(): TimerIdle {
         this.ctx.timeLeft = this.ctx.initialTime;
-        this.ctx.publisher.publish({ type: 'TICKED', timeLeft: this.ctx.timeLeft });
+        this.ctx.publisher.publish(factoryEvent.tickedEvent(this.ctx.timeLeft));
         return new TimerIdle(this.ctx);
     }
+
+    /**
+     * `destroy`
+     *
+     * Cleanup any allocated resource and or state internal state.
+     */
+    destroy(): void {}
 }
 
 /**
@@ -135,7 +142,7 @@ export class TimerRunning extends TimerState {
     override reset(): TimerIdle {
         clearInterval(this.intervalId);
         this.ctx.timeLeft = this.ctx.initialTime;
-        this.ctx.publisher.publish({ type: 'TICKED', timeLeft: this.ctx.timeLeft });
+        this.ctx.publisher.publish(factoryEvent.tickedEvent(this.ctx.timeLeft));
         return new TimerIdle(this.ctx);
     }
 
@@ -148,14 +155,18 @@ export class TimerRunning extends TimerState {
         return setInterval(() => {
             if (this.ctx.timeLeft > 0) {
                 this.ctx.timeLeft--;
-                this.ctx.publisher.publish({ type: 'TICKED', timeLeft: this.ctx.timeLeft });
+                this.ctx.publisher.publish(factoryEvent.tickedEvent(this.ctx.timeLeft));
 
                 if (this.ctx.timeLeft === 0) {
                     clearInterval(this.intervalId);
-                    this.ctx.publisher.publish({ type: 'TIMEDOUT' });
+                    this.ctx.publisher.publish(factoryEvent.expiredEvent());
                 }
             }
         }, this.ctx.delay);
+    }
+
+    override destroy() {
+        clearInterval(this.intervalId);
     }
 }
 
@@ -230,6 +241,28 @@ export class TimerExpired extends TimerState {
  *
  * @returns `TimerIdle`
  */
-export const getNewTimer = (time: number, publisher: TimerEventPublisher, delay: number = 1) => {
-    return new TimerIdle({ initialTime: time, timeLeft: time, publisher: publisher, delay: delay });
+export const getNewTimer = (
+    time: number,
+    publisher: TimerEventPublisher,
+    delay: number = 1,
+): TimerIdle => {
+    return getTimerWithContext({
+        initialTime: time,
+        timeLeft: time,
+        publisher: publisher,
+        delay: delay,
+    });
+};
+
+/**
+ * `getTimerWithContext`
+ *
+ * Returns a new timer with internal details based on the context passed.
+ *
+ * @param interface object describing the details of a timer.
+ *
+ * @returns `TimerIdle`
+ */
+export const getTimerWithContext = (timerContext: TimerContext): TimerIdle => {
+    return new TimerIdle(timerContext);
 };

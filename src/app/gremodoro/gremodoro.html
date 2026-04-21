@@ -1,0 +1,30 @@
+<div class="app-layout">
+    <nav class="top-nav">
+        <div class="top-nav__brand">
+            <h1 routerLink="/gremodoro">Gremodoro</h1>
+        </div>
+        <div class="top-nav__actions">
+            <button
+                class="btn-ghost"
+                (click)="displayTodoList()"
+                title="Tasks List"
+                aria-label="Tasks List"
+            >
+                <app-icon name="list" />
+            </button>
+            <button
+                class="btn-ghost"
+                (click)="displaySettings()"
+                title="Settings"
+                aria-label="Settings"
+            >
+                <app-icon name="settings" />
+            </button>
+        </div>
+    </nav>
+
+    <main class="content-area">
+        <app-gremodoro-manager />
+        <app-timer />
+    </main>
+</div>

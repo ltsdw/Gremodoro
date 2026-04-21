@@ -1,0 +1,107 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+.settings-modal {
+    @include m.floating-card;
+    @include m.flex-center;
+
+    font-family: v.$font-family-segoe-monospace;
+    width: clamp(320px, 90dvw, 480px);
+    color: v.$text-main;
+}
+
+.settings-modal__surface {
+    display: flex;
+    flex-direction: column;
+    gap: v.$space-lg;
+}
+
+.settings-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h2 {
+        @include m.title-font-size;
+        margin: 0;
+    }
+
+    button {
+        @include m.button-font-size;
+        color: v.$text-muted-dark;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: v.$color-work;
+        }
+    }
+}
+
+.settings-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: v.$space-md;
+
+    label.form-field {
+        display: flex;
+        flex-direction: column;
+        gap: v.$space-sm;
+
+        span {
+            @include m.body-font-size;
+            color: v.$text-muted;
+            letter-spacing: v.$space-xxxs;
+        }
+    }
+
+    button[type='submit'] {
+        @include m.body-font-size;
+        margin-top: v.$space-md;
+        padding: v.$space-md;
+        background-color: v.$text-muted-dark;
+        color: v.$text-main;
+        font-weight: bold;
+        border: none;
+        border-radius: v.$radius-sm;
+        cursor: pointer;
+        transition:
+            background-color 0.2s,
+            transform 0.1s;
+
+        &:hover:not(:disabled) {
+            background-color: v.$color-work;
+            transform: translateY(-(v.$space-xxs));
+        }
+
+        &:disabled {
+            background-color: v.$bg-app;
+            color: v.$text-muted-dark;
+            cursor: not-allowed;
+        }
+    }
+
+    input[type='number'] {
+        @include m.title-font-size;
+        background-color: v.$bg-app;
+        color: v.$text-main;
+        border: v.$space-xxs solid transparent;
+        outline: none;
+
+        padding: v.$space-md;
+        border-radius: v.$radius-sm;
+
+        transition: all 0.2s ease-in-out;
+
+        &:focus {
+            @include m.neon-border;
+        }
+    }
+
+    .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: v.$space-sm;
+    }
+}

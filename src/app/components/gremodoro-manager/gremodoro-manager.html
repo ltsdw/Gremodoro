@@ -1,0 +1,63 @@
+<div class="gremodoro-manager">
+    <div class="modes-container">
+        <div class="modes-container__mode-selection">
+            <button
+                title="Focus Time"
+                aria-label="Focus Time"
+                [class.active]="currentMode().type === 'focusTime'"
+                (click)="focusTimeMode()"
+            >
+                Focus Time
+            </button>
+            <button
+                title="Short Break"
+                aria-label="Short Break"
+                [class.active]="currentMode().type === 'shortBreak'"
+                (click)="shortBreakMode()"
+            >
+                Short Break
+            </button>
+            <button
+                title="Long Break"
+                aria-label="Long Break"
+                [class.active]="currentMode().type === 'longBreak'"
+                (click)="longBreakMode()"
+            >
+                Long Break
+            </button>
+        </div>
+    </div>
+    <div class="stats-container">
+        <button
+            title="Statistics"
+            aria-label="Statistics"
+            class="btn-ghost"
+            (click)="toggleStats()"
+        >
+            <app-icon
+                name="chevron-down"
+                [style.transform]="isStatsOpen() ? 'rotate(180deg)' : 'none'"
+                style="transition: transform 0.2s"
+            />
+        </button>
+
+        @if (isStatsOpen()) {
+            <div class="stats-tray">
+                <div class="stat-item">
+                    <span class="stat-label">Focus Sessions</span>
+                    <span class="stat-value">{{ gremodorosCount() }}</span>
+                </div>
+
+                <div class="stat-item">
+                    <span class="stat-label">Short Breaks</span>
+                    <span class="stat-value">{{ shortBreaksCount() }}</span>
+                </div>
+
+                <div class="stat-item">
+                    <span class="stat-label">Long Breaks</span>
+                    <span class="stat-value">{{ longBreaksCount() }}</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>

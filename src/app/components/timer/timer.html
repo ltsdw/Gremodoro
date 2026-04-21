@@ -1,19 +1,52 @@
-<div class="gremodo-container">
-    <h1 class="timer-display">
-        {{ timerService.timeLeft() | timeFormat }}
-    </h1>
+<div class="timer-container">
+    <div class="timer-container__timer-progress">
+        <div class="timer-wrapper">
+            <svg viewBox="0 0 320 320">
+                <circle class="circle-track" cx="160" cy="160" r="140"></circle>
+                <circle
+                    class="circle-progress"
+                    cx="160"
+                    cy="160"
+                    r="140"
+                    [style.stroke-dashoffset.px]="offset()"
+                ></circle>
+            </svg>
 
-    <div class="timer-controls">
-        @if (!isExpired() && (isIdle() || isPaused())) {
-            <button (click)="timerService.startTimer()">Play</button>
-        }
+            <div class="time-display">
+                {{ timerService.timeLeft() | timeFormat }}
+            </div>
+        </div>
+    </div>
 
-        @if (!isExpired() && isRunning()) {
-            <button (click)="timerService.pauseTimer()">Pause</button>
-        }
+    <div class="timer-container__timer-controllers">
+        <button
+            class="btn-pause"
+            [disabled]="!canSensitivePauseBtn()"
+            (click)="timerService.pauseTimer(); audioService.playClick()"
+            title="Pause"
+            aria-label="Pause"
+        >
+            <app-icon name="pause-circle" />
+        </button>
 
-        @if (!isIdle() || isExpired()) {
-            <button (click)="timerService.resetTimer()">Reset</button>
-        }
+        <button
+            class="btn-play"
+            [disabled]="!canSensitivePlayBtn()"
+            (click)="timerService.startTimer(); audioService.playClick()"
+            title="Play"
+            aria-label="Play"
+        >
+            <app-icon name="play" />
+        </button>
+
+        <button
+            class="btn-reset"
+            [disabled]="!canSensitiveResetBtn()"
+            (click)="timerService.resetTimer(); audioService.playClick()"
+            title="Reset"
+            aria-label="Reset"
+        >
+            <app-icon name="backward" />
+        </button>
     </div>
 </div>

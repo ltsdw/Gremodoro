@@ -1,0 +1,31 @@
+<div class="settings-modal">
+    <div class="settings-modal__surface">
+        <header class="settings-modal__header">
+            <h2>Timer Settings</h2>
+            <button class="btn-close" (click)="close()" title="Close" aria-label="Close">
+                <app-icon name="x-mark" />
+            </button>
+        </header>
+
+        <form class="settings-modal__form" [formGroup]="settingsForm" (ngSubmit)="save()">
+            <label class="form-field">
+                <span>Focus Time (minutes)</span>
+                <input type="number" formControlName="focusTime" />
+            </label>
+
+            <label class="form-field">
+                <span>Short Break (minutes)</span>
+                <input type="number" formControlName="shortBreak" />
+            </label>
+
+            <label class="form-field">
+                <span>Long Break (minutes)</span>
+                <input type="number" formControlName="longBreak" />
+            </label>
+
+            <button type="submit" [disabled]="settingsForm.invalid" title="Save" aria-label="Save">
+                Save
+            </button>
+        </form>
+    </div>
+</div>

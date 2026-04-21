@@ -1,0 +1,48 @@
+<div class="todo-modal">
+    <div class="todo-modal__surface">
+        <header class="todo-modal__header">
+            <h2>Tasks</h2>
+            <button class="btn-close" (click)="close()" title="Close" aria-label="Close">
+                <app-icon name="x-mark" />
+            </button>
+        </header>
+
+        <div class="input-group">
+            <input
+                type="text"
+                [formControl]="taskInput"
+                (keyup.enter)="addTask()"
+                placeholder="What are you planning?"
+            />
+            <button class="btn-add" (click)="addTask()" title="Add Task" aria-label="Add Task">
+                <app-icon name="plus"></app-icon>
+            </button>
+        </div>
+
+        <ul class="task-list">
+            @for (task of tasksService.tasks(); track task.id) {
+                <li class="task-item" [class.is-completed]="task.completed">
+                    <button
+                        class="check-btn"
+                        (click)="toggleTask(task.id)"
+                        title="Toggle Complete Task"
+                        aria-label="Toggle Complete Task"
+                    >
+                        <app-icon [name]="task.completed ? 'check-circle' : 'circle'"></app-icon>
+                    </button>
+
+                    <span class="task-text">{{ task.description }}</span>
+
+                    <button
+                        class="delete-btn"
+                        (click)="removeTask(task.id)"
+                        title="Remove Task"
+                        aria-label="Remove Task"
+                    >
+                        <app-icon name="trash"></app-icon>
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

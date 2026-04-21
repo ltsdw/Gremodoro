@@ -1,0 +1,71 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    width: 100dvw;
+    background-color: v.$bg-app;
+    color: v.$text-main;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.top-nav {
+    @include m.flex-center;
+
+    padding: v.$space-lg v.$space-xl;
+    justify-content: space-between;
+
+    &__brand {
+        h1 {
+            @include m.title-font-size;
+            letter-spacing: v.$space-xs;
+            margin: 0;
+            font-family: v.$font-family-segoe-monospace;
+            color: v.$text-muted;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: v.$space-sm;
+
+        .btn-ghost {
+            @include m.flex-center;
+            @include m.button-font-size;
+
+            padding: v.$radius-xxs;
+            background-color: v.$bg-card;
+            color: v.$text-muted;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 v.$radius-xs v.$radius-xs v.$shadow-soft;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: v.$text-muted;
+                color: v.$color-work;
+                transform: scale(1.1) translateY(-(v.$space-xxs));
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+    }
+}
+
+.content-area {
+    @include m.flex-center;
+
+    flex-direction: column;
+    gap: v.$space-xl;
+}
