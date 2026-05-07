@@ -33,8 +33,18 @@ export class GremodoroManager {
         effect(() => {
             this.updateTitle();
         });
+
+        effect(() => {
+            this.commitPendingSettings();
+        });
     }
 
+    /**
+     * `updateTitle`
+     *
+     * Updates the page's title based on the current time on the timer.
+     * If the timer is idled, only the application name is used.
+     */
     private updateTitle() {
         const seconds = this.timerService.timeLeft();
         const mode = {
@@ -50,6 +60,16 @@ export class GremodoroManager {
         }
     }
 
+    /**
+     * `countModeChanges`
+     *
+     * Calculates the number of Pomodoros and breaks, and based on that, set the next timer mode.
+     *
+     * Eg. at each completed Pomodoro automatically changes to a short break
+     * and at each 4 completed Pomodoros automatically changes to a long break.
+     *
+     * After a break is completed, the mode changes back to focus mode.
+     */
     private countModeChanges() {
         if (this.timerService.timer() instanceof TimerExpired) {
             switch (this.currentMode().type) {
@@ -76,6 +96,50 @@ export class GremodoroManager {
         }
     }
 
+    /**
+     * `commitPendingSettings`
+     *
+     * Only commits the pending settings (settings that were just changed but couldn't be applied yet)
+     * if the timer is either idled or expired (this helps not overwrite a current running timer).
+     */
+    private commitPendingSettings() {
+        const pending = this.settings.pendingSettings();
+        const currentState = this.timerService.timer();
+        const currentMode = this.currentMode();
+        const active = this.settings.settings();
+
+        if (pending === active) {
+            return;
+        }
+
+        if (!(currentState instanceof TimerIdle || currentState instanceof TimerExpired)) {
+            return;
+        }
+
+        this.settings.commit();
+
+        switch (currentMode.type) {
+            case 'focusTime': {
+                this.timerService.setupTimer(this.settings.settings().focusTime * 60);
+                break;
+            }
+            case 'shortBreak': {
+                this.timerService.setupTimer(this.settings.settings().shortBreak * 60);
+                break;
+            }
+            case 'longBreak': {
+                this.timerService.setupTimer(this.settings.settings().longBreak * 60);
+                break;
+            }
+        }
+    }
+
+    /**
+     * `setMode`
+     *
+     * A helper to set the current mode.
+     * Possible modes are: `focusTimeMode`, `shortBreakMode` and `longBreakMode`.
+     */
     private setMode(mode: TimerMode) {
         this.currentMode.set(mode);
         this.timerService.setupTimer(mode.duration);
@@ -93,6 +157,11 @@ export class GremodoroManager {
         this.setMode(factoryMode.longBreakMode(this.settings.settings().longBreak * 60));
     }
 
+    /**
+     * `toggleStats`
+     *
+     * A simple toggle to open or close the status tab.
+     */
     toggleStats() {
         this.isStatsOpen.update((v) => !v);
     }
