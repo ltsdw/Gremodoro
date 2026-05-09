@@ -31,7 +31,7 @@
                         <app-icon [name]="task.completed ? 'check-circle' : 'circle'"></app-icon>
                     </button>
 
-                    <span class="task-text">{{ task.description }}</span>
+                    <span class="task-text" [title]="task.description">{{ task.description }}</span>
 
                     <button
                         class="delete-btn"
