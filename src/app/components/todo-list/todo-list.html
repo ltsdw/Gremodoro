@@ -15,21 +15,31 @@
                 placeholder="What are you planning?"
             />
             <button class="btn-add" (click)="addTask()" title="Add Task" aria-label="Add Task">
-                <app-icon name="plus"></app-icon>
+                <app-icon name="plus" />
             </button>
         </div>
 
-        <ul class="task-list">
+        <ul cdkDropList (cdkDropListDropped)="onTaskDrop($event)" class="task-list">
             @for (task of tasksService.tasks(); track task.id) {
-                <li class="task-item" [class.is-completed]="task.completed">
+                <li
+                    cdkDrag
+                    class="task-item"
+                    [class.is-completed]="task.completed"
+                    (cdkDragStarted)="onDragStart()"
+                    (cdkDragEnded)="onDragEnd()"
+                >
                     <button
                         class="check-btn"
                         (click)="toggleTask(task.id)"
                         title="Toggle Complete Task"
                         aria-label="Toggle Complete Task"
                     >
-                        <app-icon [name]="task.completed ? 'check-circle' : 'circle'"></app-icon>
+                        <app-icon [name]="task.completed ? 'check-circle' : 'circle'" />
                     </button>
+
+                    <div cdkDragHandle class="drag-handle">
+                        <app-icon name="bars" />
+                    </div>
 
                     <span class="task-text" [title]="task.description">{{ task.description }}</span>
 
@@ -39,7 +49,7 @@
                         title="Remove Task"
                         aria-label="Remove Task"
                     >
-                        <app-icon name="trash"></app-icon>
+                        <app-icon name="x-mark" />
                     </button>
                 </li>
             }

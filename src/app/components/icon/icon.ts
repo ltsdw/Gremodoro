@@ -22,6 +22,7 @@ export class Icon {
         | 'check-circle'
         | 'trash'
         | 'chevron-down'
+        | 'bars'
     >();
 
     size = input<number | string | undefined>();

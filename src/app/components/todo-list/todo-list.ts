@@ -1,13 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, DOCUMENT, inject, Inject, Renderer2 } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
+import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { Icon } from '../icon/icon';
 import { TodoList as TodoListService } from '../../services/todo-list';
+import { TaskList } from '../../models/task';
 
 @Component({
     selector: 'app-todo-list',
-    imports: [ReactiveFormsModule, Icon],
+    imports: [ReactiveFormsModule, DragDropModule, Icon],
     templateUrl: './todo-list.html',
     styleUrl: './todo-list.scss',
 })
@@ -16,6 +18,48 @@ export class TodoList {
     tasksService = inject(TodoListService);
 
     taskInput = new FormControl('');
+
+    constructor(
+        @Inject(DOCUMENT) private document: Document,
+        private renderer: Renderer2,
+    ) {}
+
+    /**
+     * `onDragStart`
+     *
+     * Adds a global CSS class to the document body when a drag operation begins.
+     * This ensures consistent styling, such as cursor behavior,
+     * across the entire document during the drag interaction.
+     */
+    onDragStart() {
+        this.renderer.addClass(this.document.body, 'is-global-dragging');
+    }
+
+    /**
+     * `onDragEnd`
+     *
+     * Removes the global CSS class from the document body when a drag operation finishes.
+     * This restores the document's default styling and pointer interactions.
+     */
+    onDragEnd() {
+        this.renderer.removeClass(this.document.body, 'is-global-dragging');
+    }
+
+    /**
+     * `onTaskDrop`
+     *
+     * Handles the drop event for task items. It reorders the tasks array based on
+     * the drag interaction and updates the reactive state in the tasks service.
+     *
+     * @param event The drag and drop event.
+     */
+    onTaskDrop(event: CdkDragDrop<TaskList>) {
+        const tasks = [...this.tasksService.tasks()];
+
+        moveItemInArray(tasks, event.previousIndex, event.currentIndex);
+
+        this.tasksService.tasks.set(tasks);
+    }
 
     /**
      * `addTask`

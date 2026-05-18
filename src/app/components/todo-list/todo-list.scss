@@ -104,60 +104,62 @@
         overflow-y: auto;
         flex: 1;
     }
+}
 
-    .task-item {
-        @include m.flex-center;
+.task-item,
+::ng-deep .cdk-drag-preview.task-item {
+    @include m.flex-center;
 
-        gap: v.$space-sm;
-        padding: v.$space-sm;
-        border-radius: v.$radius-sm;
-        transition: background-color 0.2s;
-        min-width: 0;
+    gap: v.$space-sm;
+    padding: v.$space-sm;
+    border-radius: v.$radius-sm;
+    transition: background-color 0.2s;
+    min-width: 0;
 
-        &:hover {
-            background-color: v.$color-white-soft;
+    &:hover {
+        background-color: v.$color-white-soft;
 
-            .delete-btn {
-                opacity: 1;
-                pointer-events: auto;
-            }
-        }
-
-        .task-text {
-            @include m.body-font-size;
-            flex: 1;
-            color: v.$text-main;
-            transition: color 0.3s ease;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            position: relative;
-
-            &::after {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                width: 0%;
-                height: 2px;
-                background-color: v.$text-muted;
-                transition: width 0.3s ease-in-out;
-            }
-        }
-
-        &.is-completed {
-            .task-text {
-                color: v.$text-muted;
-                &::after {
-                    width: 100%;
-                }
-            }
-            .check-btn {
-                color: v.$color-short;
-            }
+        .delete-btn {
+            opacity: 1;
+            pointer-events: auto;
         }
     }
 
+    .task-text {
+        @include m.body-font-size;
+        flex: 1;
+        color: v.$text-main;
+        transition: color 0.3s ease;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 0%;
+            height: 2px;
+            background-color: v.$text-muted;
+            transition: width 0.3s ease-in-out;
+        }
+    }
+
+    &.is-completed {
+        .task-text {
+            color: v.$text-muted;
+            &::after {
+                width: 100%;
+            }
+        }
+        .check-btn {
+            color: v.$color-short;
+        }
+    }
+
+    .drag-handle,
     .check-btn,
     .delete-btn {
         @include m.button-font-size;
@@ -167,6 +169,19 @@
         display: flex;
         color: v.$text-muted;
         transition: all 0.2s;
+    }
+
+    .drag-handle {
+        cursor: grab;
+        user-select: none;
+    }
+
+    .drag-handle:active {
+        cursor: grabbing;
+    }
+
+    .drag-handle:hover {
+        color: v.$color-work;
     }
 
     .check-btn:hover {
@@ -182,4 +197,42 @@
             transform: scale(1.1);
         }
     }
+}
+
+::ng-deep .cdk-drag-preview.task-item {
+    background: v.$color-white-soft;
+    cursor: grabbing !important;
+
+    .drag-handle {
+        color: v.$text-muted-mid !important;
+    }
+
+    * {
+        cursor: grabbing !important;
+    }
+
+    .delete-btn {
+        display: none !important;
+    }
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.task-list.cdk-drop-list-dragging .task-item:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+::ng-deep .is-global-dragging,
+::ng-deep .is-global-dragging * {
+    cursor: grabbing !important;
+}
+
+.task-list.cdk-drop-list-dragging .task-item {
+    pointer-events: none;
 }
