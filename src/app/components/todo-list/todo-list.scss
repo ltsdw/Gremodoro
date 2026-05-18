@@ -119,7 +119,8 @@
     &:hover {
         background-color: v.$color-white-soft;
 
-        .delete-btn {
+        .delete-btn,
+        .drag-handle {
             opacity: 1;
             pointer-events: auto;
         }
@@ -171,6 +172,12 @@
         transition: all 0.2s;
     }
 
+    .delete-btn,
+    .drag-handle {
+        opacity: 0;
+        pointer-events: none;
+    }
+
     .drag-handle {
         cursor: grab;
     }
@@ -192,6 +199,7 @@
     cursor: grabbing !important;
 
     .drag-handle {
+        opacity: 1 !important;
         color: v.$text-muted-mid !important;
     }
 
