@@ -173,29 +173,17 @@
 
     .drag-handle {
         cursor: grab;
-        user-select: none;
     }
 
     .drag-handle:active {
         cursor: grabbing;
     }
 
-    .drag-handle:hover {
-        color: v.$color-work;
-    }
-
+    .delete-btn:hover,
+    .drag-handle:hover,
     .check-btn:hover {
         color: v.$color-work;
-    }
-
-    .delete-btn {
-        opacity: 0;
-        pointer-events: none;
-        color: #ef4444;
-
-        &:hover {
-            transform: scale(1.1);
-        }
+        transform: scale(1.1);
     }
 }
 
