@@ -59,6 +59,7 @@ export class TodoList {
         moveItemInArray(tasks, event.previousIndex, event.currentIndex);
 
         this.tasksService.tasks.set(tasks);
+        this.tasksService.saveTasks();
     }
 
     /**
